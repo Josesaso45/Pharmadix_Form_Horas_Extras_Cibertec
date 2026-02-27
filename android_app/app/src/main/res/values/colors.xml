@@ -21,4 +21,7 @@
     <color name="estado_pendiente">#9E9E9E</color>      <!-- Gris – PENDIENTE -->
     <color name="estado_en_proceso">#F57C00</color>     <!-- Naranja – EN_PROCESO -->
     <color name="estado_finalizado">#388E3C</color>     <!-- Verde – FINALIZADO -->
+
+    <!-- Requerido por mipmap-anydpi-v26/ic_launcher.xml -->
+    <color name="ic_launcher_background">#1A237E</color>
 </resources>

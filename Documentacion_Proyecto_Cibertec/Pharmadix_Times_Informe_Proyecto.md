@@ -688,24 +688,24 @@ flowchart TD
 
 ```mermaid
 graph TB
-    subgraph Android_App [📱 App Android - Pharmadix Times]
-        Login[LoginActivity\nXML + View Binding]
-        Dashboard[DashboardActivity\nNavigation Component]
-        Registro[RegistroOperariosFragment\nRecyclerView + ZXing QR]
-        Room[(Room SQLite\n5 tablas)]
-        Retrofit_Client[Retrofit Client\nOkHttp + JWT Interceptor]
+    subgraph Android_App [App Android - Pharmadix Times]
+        Login[LoginActivity - XML + View Binding]
+        Dashboard[DashboardActivity - Navigation Component]
+        Registro[RegistroOperariosFragment - RecyclerView + ZXing QR]
+        Room[(Room SQLite - 5 tablas)]
+        Retrofit_Client[Retrofit Client - OkHttp + JWT Interceptor]
     end
 
-    subgraph Backend_API [☁️ Backend - Node.js/Fastify]
+    subgraph Backend_API [Backend - Node.js Fastify]
         Auth_EP[POST /auth/login]
         Hojas_EP[GET /hojas]
-        Registros_EP[POST PUT /registros]
+        Registros_EP[POST-PUT /registros]
         DB[(PostgreSQL 15+)]
     end
 
-    subgraph Admin_Portal [🖥️ Portal Web - React PWA]
+    subgraph Admin_Portal [Portal Web - React PWA]
         Dashboard_Web[Dashboard Admin]
-        Aprobacion[Flujo de Aprobación / Cierre]
+        Aprobacion[Flujo de Aprobacion y Cierre]
     end
 
     Login --> Dashboard
