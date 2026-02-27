@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  email     String   @unique
+  usuario   String   @unique
+  password  String
+  rol       String   @default("tomador") // "tomador" | "admin"
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  hojas HojaTiempo[]
+
+  @@map("usuarios")
+}
+
+model Empleado {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  gafete    String   @unique
+  area      String?
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  registros RegistroTiempo[]
+
+  @@map("empleados")
+}
+
+model HojaTiempo {
+  id           Int      @id @default(autoincrement())
+  numeroHoja   String   @unique
+  loteId       Int?
+  tomadorId    Int
+  fechaEmision DateTime @default(now())
+  turno        String   // "mañana" | "tarde" | "noche"
+  estado       String   @default("abierta") // "abierta" | "cerrada"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tomador   Usuario          @relation(fields: [tomadorId], references: [id])
+  registros RegistroTiempo[]
+
+  @@map("hojas_tiempo")
+}
+
+model RegistroTiempo {
+  id           Int       @id @default(autoincrement())
+  hojaId       Int
+  empleadoId   Int
+  actividad    String
+  horaEntrada  DateTime
+  horaSalida   DateTime?
+  horasTotales Float?
+  estado       String    @default("en_proceso") // "en_proceso" | "finalizado"
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  hoja     HojaTiempo @relation(fields: [hojaId], references: [id])
+  empleado Empleado   @relation(fields: [empleadoId], references: [id])
+
+  @@map("registros_tiempo")
+}

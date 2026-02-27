@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.android_app.data.remote.RetrofitClient
 import com.example.android_app.data.remote.model.LoginRequest
 import kotlinx.coroutines.launch
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -44,8 +47,22 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     _loginState.value = LoginState.Error("Usuario o contraseña incorrectos")
                 }
+            } catch (e: ConnectException) {
+                _loginState.value = LoginState.Error(
+                    "No se puede conectar al servidor.\nVerifica que el servidor esté en ejecución."
+                )
+            } catch (e: SocketTimeoutException) {
+                _loginState.value = LoginState.Error(
+                    "El servidor tardó demasiado en responder.\nIntenta de nuevo."
+                )
+            } catch (e: UnknownHostException) {
+                _loginState.value = LoginState.Error(
+                    "No se puede alcanzar el servidor.\nRevisa tu conexión a internet."
+                )
             } catch (e: Exception) {
-                _loginState.value = LoginState.Error("Error de conexión: ${e.message}")
+                _loginState.value = LoginState.Error(
+                    "Error inesperado. Intenta de nuevo."
+                )
             }
         }
     }
