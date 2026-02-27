@@ -1,9 +1,19 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Android_app" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema principal: mantiene el nombre original del proyecto "Theme.Android_app"
+         para no romper el manifest, pero hereda de Material3. -->
+    <style name="Theme.Android_app" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Colores primarios Pharmadix -->
+        <item name="colorPrimary">@color/pharmadix_primary</item>
+        <item name="colorPrimaryVariant">@color/pharmadix_primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secundario / acento -->
+        <item name="colorSecondary">@color/pharmadix_accent</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Fondos -->
+        <item name="android:colorBackground">@color/surface_background</item>
+        <item name="colorSurface">@color/white</item>
+        <!-- Barra de estado -->
+        <item name="android:statusBarColor">@color/pharmadix_primary_dark</item>
     </style>
-
-    <style name="Theme.Android_app" parent="Base.Theme.Android_app" />
 </resources>

@@ -1,3 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">android_app</string>
+    <string name="app_name">Pharmadix Times</string>
+
+    <!-- Login -->
+    <string name="login_subtitulo">Gestión de Tiempos de Producción</string>
+    <string name="login_usuario">Usuario</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_btn">Iniciar Sesión</string>
+    <string name="login_footer">© 2026 Pharmadix. Todos los derechos reservados.</string>
+    <string name="login_error_campos">Complete todos los campos</string>
+    <string name="login_cargando">Iniciando sesión…</string>
+
+    <!-- Dashboard / Registro -->
+    <string name="registro_titulo">Registro de Operarios</string>
+    <string name="registro_escanear_qr">Escanear QR</string>
+    <string name="registro_buscar_manual">Buscar Manual</string>
+    <string name="registro_cerrar_hoja">Finalizar y Cerrar Hoja</string>
+    <string name="registro_sin_registros">Sin registros. Escanee QR o busque un operario.</string>
+    <string name="registro_completados">%1$d de %2$d completados</string>
+
+    <!-- Estados -->
+    <string name="estado_pendiente">PENDIENTE</string>
+    <string name="estado_en_proceso">EN PROCESO</string>
+    <string name="estado_finalizado">FINALIZADO</string>
+
+    <!-- Errores generales -->
+    <string name="error_conexion">Error de conexión. Verifique su red.</string>
+    <string name="error_generico">Ocurrió un error. Intente nuevamente.</string>
+
+    <!-- Acciones -->
+    <string name="accion_entrada">Registrar Entrada</string>
+    <string name="accion_salida">Registrar Salida</string>
+    <string name="accion_cancelar">Cancelar</string>
+    <string name="accion_confirmar">Confirmar</string>
 </resources>

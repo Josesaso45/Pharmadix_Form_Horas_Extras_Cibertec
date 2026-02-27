@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface_background">
+
+    <!-- AppBar con info de la hoja -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/pharmadix_primary"
+            app:title="@string/registro_titulo"
+            app:titleTextColor="@color/white"
+            app:navigationIconTint="@color/white" />
+
+        <!-- Barra de info de la hoja seleccionada -->
+        <LinearLayout
+            android:id="@+id/layoutInfoHoja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/pharmadix_primary_light"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:id="@+id/tvNombreProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:text="Producto: --" />
+
+            <TextView
+                android:id="@+id/tvTurno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#CCFFFFFF"
+                android:textSize="13sp"
+                android:text="Turno: --" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenido principal -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- Botones de acción rápida -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBuscarManual"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="@string/registro_buscar_manual"
+                app:icon="@drawable/ic_search"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                app:iconGravity="start" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCerrarHoja"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="@string/registro_cerrar_hoja"
+                android:backgroundTint="@color/pharmadix_accent"
+                app:icon="@drawable/ic_check"
+                app:iconGravity="start" />
+
+        </LinearLayout>
+
+        <!-- Encabezado de la lista -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp"
+            android:text="Operarios Registrados"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/text_primary" />
+
+        <!-- RecyclerView principal – patrón Cibertec Sesión 3 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewOperarios"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp" />
+
+    </LinearLayout>
+
+    <!-- FAB: Escanear QR (siempre visible) -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabEscanearQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="@string/registro_escanear_qr"
+        app:icon="@drawable/ic_qr_code"
+        android:backgroundTint="@color/pharmadix_primary"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
+        app:layout_anchorGravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
