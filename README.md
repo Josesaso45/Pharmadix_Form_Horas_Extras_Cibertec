@@ -4,11 +4,11 @@ Sistema de Gestión de Tiempos y Horas Hombre optimizado para la planta de produ
 
 ## 📋 Descripción del Proyecto
 
-Pharmadix Times es una **PWA (Progressive Web App)** diseñada para modernizar el control de tiempos en planta. Reemplaza el registro manual en papel por una solución digital táctil, segura y con capacidades offline.
+Pharmadix Times es una **PWA (Progressive Web App)** diseñada para modernizar el control de tiempos en planta. Reemplaza el registro manual en papel por una solución digital táctil e instalable; está pensada para usarse **con conexión** (enfoque network-first).
 
 ### ✨ Características Principales
 - **Escaneo QR:** Identificación instantánea de operarios mediante cámara.
-- **Modo Offline-First:** Sincronización automática de datos cuando hay conexión.
+- **PWA instalable:** Se puede añadir a la pantalla de inicio; requiere conexión para el uso completo.
 - **Validación de Lotes:** Control inteligente de estados (Abierto/Cerrado).
 - **Cumplimiento ALCOA+:** Trazabilidad total de registros y firmas digitales.
 - **Reportería:** Dashboards en tiempo real de eficiencia y costos.
@@ -21,7 +21,7 @@ Pharmadix Times es una **PWA (Progressive Web App)** diseñada para modernizar e
 - **UI/UX:** Tailwind CSS, shadcn/ui.
 - **Iconos:** Lucide React, Bootstrap Icons.
 - **Hardware:** html5-qrcode (Acceso a cámara).
-- **Almacenamiento:** Browser LocalStorage / IndexedDB.
+- **Almacenamiento:** Browser LocalStorage (datos locales; la app requiere conexión para uso completo).
 
 ---
 
@@ -57,8 +57,7 @@ La aplicación estará disponible en `http://localhost:8080` (o el siguiente pue
 ## 📂 Estructura del Proyecto
 
 ```text
-├── Documentacion_Realizada/   # Portal de documentación HTML y técnicos
-├── docs/                      # Manuales en formato Markdown
+├── Documentacion_Realizada/   # Portal de documentación HTML + manuales Markdown
 ├── frontend/                  # Código fuente de la aplicación React
 │   ├── src/
 │   │   ├── components/        # Componentes UI y lógica de negocio
@@ -79,6 +78,6 @@ Abre `Documentacion_Realizada/Referencia_Documentacion/index.html` en tu navegad
 
 ## 👥 Contribución y Desarrollo
 
-Consulta el `CHANGELOG.md` para ver el historial de cambios y `docs/MANUAL_DESARROLLADOR.md` para pautas de desarrollo.
+Consulta el `CHANGELOG.md` para ver el historial de cambios y `Documentacion_Realizada/MANUAL_DESARROLLADOR.md` para pautas de desarrollo.
 
 © 2026 Pharmadix Corp. S.A. | Todos los derechos reservados.

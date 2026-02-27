@@ -1,0 +1,24 @@
+{
+  "name": "Pharmadix Times",
+  "short_name": "Pharmadix Times",
+  "description": "Sistema de gestión de tiempos de producción para Pharmadix",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F9FA",
+  "theme_color": "#410468",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-pharmadix.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-pharmadix.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

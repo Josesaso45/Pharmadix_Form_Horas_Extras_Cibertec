@@ -15,7 +15,7 @@ export default function Dashboard() {
   const [pendingSheets, setPendingSheets] = useState(0);
   const [activeHojas, setActiveHojas] = useState<HojaTiempo[]>([]);
 
-  // Simular detección de conexión
+  // Indicador de estado de conexión (la app requiere conexión para uso completo; network-first)
   useEffect(() => {
     const handleOnline = () => setConnectionStatus('online');
     const handleOffline = () => setConnectionStatus('offline');

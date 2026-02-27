@@ -5,7 +5,7 @@
 - **Estilos**: Tailwind CSS + shadcn/ui.
 - **Iconografía**: Lucide React.
 - **Escaneo QR**: html5-qrcode.
-- **Persistencia Local**: Browser LocalStorage (preparado para migrar a IndexedDB/Dexie.js).
+- **Persistencia Local**: Browser LocalStorage. PWA network-first (requiere conexión para uso completo).
 - **Gestión de Estados**: React Hooks (useState, useEffect).
 
 ## 📂 Estructura del Proyecto
@@ -50,10 +50,11 @@ Utiliza la API de bajo nivel de `html5-qrcode`. Es crítico el manejo del ciclo 
 
 ## 🚀 Próximos Pasos (Hoja de Ruta)
 1. **Migración a Backend Real**: Reemplazar `mockData.ts` con llamadas a una API REST (Fastify).
-2. **Sincronización Batch**: Implementar lógica para enviar hojas guardadas en `localStorage` al servidor mediante una cola de tareas.
-3. **PWA Avanzada**: Configurar `vite-plugin-pwa` para caching de activos offline y manifest de instalación.
+2. **Sincronización Batch**: Implementar lógica para enviar hojas guardadas en el almacenamiento local al servidor mediante una cola de tareas.
+3. **PWA Avanzada**: (Opcional) evaluar uso de estrategias de caché más avanzadas si se vuelve a un enfoque offline-first.
 
 ## 📝 Convenciones de Código
 - Mantener componentes pequeños y enfocados.
 - Tipar todas las interfaces en `types/pharmadix.ts`.
 - Usar colores de la paleta institucional (`--primary`, `--success`, etc.) definidos en `index.css`.
+

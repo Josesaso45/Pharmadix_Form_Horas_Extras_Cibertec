@@ -1,0 +1,7 @@
+{
+  "name": "pharmadix-form-horas-extras",
+  "private": true,
+  "scripts": {
+    "convert:mermaid:excalidraw": "cd frontend && npm run convert:mermaid:excalidraw"
+  }
+}

@@ -47,7 +47,7 @@ Una vez en la pantalla del lote:
 ---
 
 ## 💡 Consejos y Soluciones
-- **Modo Offline**: Si pierde la conexión a internet, puede seguir trabajando normalmente. Los datos se guardarán en su dispositivo y verá un indicador de "Offline".
+- **Modo Offline (visión original):** Si pierde la conexión a internet, puede seguir trabajando; los datos se guardan localmente y se sincronizan al recuperar la conexión. En la implementación actual (network-first) algunas de estas capacidades se simplifican, pero la experiencia de usuario se mantiene.
 - **Búsqueda Manual**: Si un código QR está dañado, use el botón **"Buscar Manual"** para encontrar al operario por nombre o número de gafete.
 - **Batería**: El escáner de QR consume batería. Asegúrese de cerrar el modal de la cámara cuando no lo esté usando.
 
@@ -55,3 +55,4 @@ Una vez en la pantalla del lote:
 
 ## 🛡️ Cumplimiento ALCOA+
 Cada registro guarda automáticamente quién realizó el escaneo, a qué hora exacta y desde qué dispositivo, garantizando la integridad y trazabilidad requerida en la industria farmacéutica.
+

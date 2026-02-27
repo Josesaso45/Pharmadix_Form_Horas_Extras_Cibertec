@@ -10,10 +10,10 @@ Este documento proporciona las pautas para el desarrollo, configuración y está
 ## 2. Estructura del Proyecto
 ```
 /
-├── frontend/           # PWA en React + Vite
+├── frontend/           # PWA en React + Vite (network-first, instalable)
 ├── backend/            # API REST en Fastify/Node.js
 ├── docker-compose.yml  # Orquestación de contenedores
-└── docs/               # Documentación técnica
+└── Documentacion_Realizada/  # Documentación técnica (Markdown + portal HTML)
 ```
 
 ## 3. Estándares de Código
@@ -85,8 +85,8 @@ module.exports = {
 ```
 
 ## 4. Flujo de Trabajo para el Tomador de Tiempos (PWA)
-1. **Offline-First:** Los datos deben guardarse siempre primero en `IndexedDB` (vía Dexie.js).
-2. **Sync:** La sincronización debe ser transparente para el usuario, gestionada por un Service Worker en segundo plano.
+1. **Offline-First (versión inicial):** Los datos debían guardarse siempre primero en `IndexedDB` (vía Dexie.js).
+2. **Estado actual (network-first):** La PWA se ha simplificado a un enfoque network-first con LocalStorage; este documento conserva la visión original para futuras iteraciones.
 3. **UX Táctil:** Botones de acción deben tener un tamaño mínimo de 48px para facilitar el uso con guantes o en tablets.
 
 ## 5. Base de Datos y Migraciones
@@ -105,3 +105,4 @@ Cada transacción debe registrar automáticamente:
 2. Copiar `.env.example` a `.env` y configurar variables.
 3. Ejecutar `docker-compose up --build`.
 4. Acceder a `http://localhost`.
+

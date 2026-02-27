@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Android (sin Compose) - Pharmadix Times</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav id="toc">
+        <div class="nav-logo">
+            <img src="assets/logo-pharmadix.png" alt="Pharmadix Logo">
+        </div>
+        <h2><i class="bi bi-phone"></i> Android</h2>
+        <ul>
+            <li><a href="index.html"><i class="bi bi-house"></i> Inicio</a></li>
+            <li><a href="manual_usuario.html"><i class="bi bi-person-workspace"></i> Manual Usuario</a></li>
+            <li><a href="manual_desarrollador.html"><i class="bi bi-code-slash"></i> Manual Dev</a></li>
+            <li><a href="flujo_procesos.html"><i class="bi bi-diagram-2"></i> Flujo Procesos</a></li>
+            <li><a href="arquitectura.html"><i class="bi bi-diagram-3"></i> Arquitectura</a></li>
+            <li><a href="informe_ejecutivo.html"><i class="bi bi-file-earmark-bar-graph"></i> Informe Técnico</a></li>
+            <li><a href="stack.html"><i class="bi bi-layers"></i> Stack</a></li>
+            <li><a href="bitacora.html"><i class="bi bi-journal-text"></i> Bitácora</a></li>
+            <li><a href="android_app.html" class="active"><i class="bi bi-phone"></i> App Android</a></li>
+            <li><a href="guia_git_main.html"><i class="bi bi-git"></i> Guía Git</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1><i class="bi bi-phone"></i> App Android nativa (sin Jetpack Compose)</h1>
+        <p>
+            Esta sección resume la guía para construir una aplicación Android nativa basada en Views XML,
+            alineada con la arquitectura y los procesos documentados para Pharmadix Times.
+        </p>
+
+        <section>
+            <h2>Objetivo</h2>
+            <p>
+                Implementar una app Android para Tomadores de Tiempos, Supervisores y Administradores que:
+            </p>
+            <ul>
+                <li>Gestione hojas de tiempo y lotes de producción.</li>
+                <li>Permita el registro de operarios mediante escaneo de códigos QR.</li>
+                <li>Sincronice datos con el backend Fastify/Node.js existente.</li>
+                <li>Respete los principios de trazabilidad y ALCOA+ definidos en la arquitectura técnica.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Arquitectura propuesta</h2>
+            <p>
+                La arquitectura Android replica los conceptos clave de la PWA:
+            </p>
+            <ul>
+                <li><strong>Capa de Presentación:</strong> Activities y Fragments con layouts XML y Navigation Component.</li>
+                <li><strong>Capa de Datos:</strong> Room (SQLite) como caché local y Retrofit/OkHttp para la API REST.</li>
+                <li><strong>Capa de Dominio (opcional):</strong> Casos de uso para operaciones como crear hoja, registrar entrada/salida, cerrar y aprobar hojas.</li>
+            </ul>
+            <p>
+                El modelo de datos local debe mantenerse coherente con
+                <code>Arquitectura_Diseno_Tecnico_v2.md</code> y <code>Flujo_Procesos_Pharmadix.md</code>.
+            </p>
+        </section>
+
+        <section>
+            <h2>Flujo de pantallas</h2>
+            <p>Los flujos se inspiran directamente en los diagramas de procesos ya definidos:</p>
+            <ul>
+                <li><strong>LoginActivity:</strong> autenticación contra la API.</li>
+                <li><strong>Dashboard:</strong> acceso a “Nueva Hoja”, “Mis Hojas” y estado de conexión.</li>
+                <li><strong>NuevaHojaFragment:</strong> alta de hoja de tiempo para un lote.</li>
+                <li><strong>RegistroOperariosFragment:</strong> escaneo de QR y registro de entrada/salida.</li>
+                <li><strong>MisHojasFragment y DetalleHojaFragment:</strong> gestión de hojas, cierre y doble confirmación.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Documentos relacionados</h2>
+            <p>Para el detalle completo de la implementación Android, consultar:</p>
+            <ul>
+                <li><code>Documentacion_Realizada/ANDROID_APP_SIN_COMPOSE.md</code> (guía técnica extendida en Markdown).</li>
+                <li><code>Documentacion_Realizada/Android_App_Sin_Compose.md</code> (resumen alineado con el resto de documentación).</li>
+                <li><code>Documentacion_Realizada/Arquitectura_Diseno_Tecnico_v2.md</code> (modelo de datos y arquitectura general).</li>
+                <li><code>Documentacion_Realizada/Flujo_Procesos_Pharmadix.md</code> (flujos operativos detallados).</li>
+            </ul>
+        </section>
+
+        <footer style="text-align: center; margin-top: 40px; color: var(--text-muted);">
+            <p>&copy; 2026 Pharmadix Corp. S.A. | Guía App Android</p>
+        </footer>
+    </main>
+
+    <button class="print-button" onclick="window.print()" title="Exportar a PDF">
+        <i class="bi bi-file-earmark-pdf"></i>
+    </button>
+</body>
+</html>
+
