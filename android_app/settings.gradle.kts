@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Pharmadix_Form_Horas_Extras_Cibertec"
+rootProject.name = "android_app"
 include(":app")

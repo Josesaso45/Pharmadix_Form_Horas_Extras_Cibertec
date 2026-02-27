@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pharmadix_form_horas_extras_cibertec"
+    namespace = "com.example.android_app"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.pharmadix_form_horas_extras_cibertec"
+        applicationId = "com.example.android_app"
         minSdk = 34
         targetSdk = 36
         versionCode = 1

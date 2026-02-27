@@ -1,4 +1,4 @@
-package com.example.pharmadix_form_horas_extras_cibertec
+package com.example.android_app
 
 import org.junit.Test
 
