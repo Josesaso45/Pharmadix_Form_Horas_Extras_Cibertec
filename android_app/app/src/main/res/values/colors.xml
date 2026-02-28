@@ -7,6 +7,8 @@
     <color name="pharmadix_accent">#7B2FBE</color>     <!-- Morado farmacéutico -->
     <color name="pharmadix_green">#2E7D32</color>       <!-- Verde éxito -->
     <color name="pharmadix_orange">#E65100</color>      <!-- Naranja advertencia -->
+    <color name="error_red">#D32F2F</color>            <!-- Rojo error -->
+    <color name="red_light">#FFCDD2</color>
 
     <!-- Textos -->
     <color name="text_primary">#212121</color>

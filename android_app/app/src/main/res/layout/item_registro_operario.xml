@@ -1,149 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_registro_operario.xml
+    Diseño basado en Stitch: "Registro de Operarios (Optimized Vertical Tablet)"
+    Muestra: avatar circular, nombre, gafete/puesto, estado y horas Entrada/Salida
+-->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
+    android:layout_marginHorizontal="12dp"
     android:layout_marginVertical="4dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/white">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/white"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/divider_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="12dp">
 
-        <!-- Nombre del operario -->
+        <!-- ===== AVATAR CIRCULAR (iniciales del operario) ===== -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardAvatar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:cardCornerRadius="22dp"
+            app:cardBackgroundColor="@color/pharmadix_primary_light"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tvIniciales"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/pharmadix_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="MR" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ===== NOMBRE DEL OPERARIO ===== -->
         <TextView
             android:id="@+id/tvNombreOperario"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:textStyle="bold"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="@color/text_primary"
-            app:layout_constraintStart_toStartOf="parent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintStart_toEndOf="@id/cardAvatar"
             app:layout_constraintEnd_toStartOf="@id/chipEstado"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Badge de estado -->
+        <!-- ===== CHIP DE ESTADO (PENDIENTE / EN_PROCESO / FINALIZADO) ===== -->
         <com.google.android.material.chip.Chip
             android:id="@+id/chipEstado"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:textColor="@color/white"
-            android:textSize="11sp"
-            app:chipMinHeight="28dp"
+            android:textSize="10sp"
+            app:chipMinHeight="24dp"
+            app:chipStartPadding="6dp"
+            app:chipEndPadding="6dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Gafete -->
+        <!-- ===== GAFETE Y PUESTO ===== -->
         <TextView
             android:id="@+id/tvGafete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/text_secondary"
-            android:textSize="13sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvNombreOperario" />
-
-        <!-- Puesto -->
-        <TextView
-            android:id="@+id/tvPuesto"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
             android:textColor="@color/text_secondary"
             android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/cardAvatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreOperario" />
+
+        <!-- ===== DIVISOR ===== -->
+        <View
+            android:id="@+id/divisorHoras"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/divider_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvGafete" />
 
-        <!-- Divisor -->
-        <View
-            android:id="@+id/divisor"
+        <!-- ===== COLUMNA ENTRADA ===== -->
+        <LinearLayout
+            android:id="@+id/columnEntrada"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@color/divider_color"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPuesto" />
-
-        <!-- Hora Entrada -->
-        <TextView
-            android:id="@+id/labelEntrada"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:layout_marginTop="8dp"
-            android:text="ENTRADA"
-            android:textColor="@color/text_secondary"
-            android:textSize="11sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divisor" />
+            app:layout_constraintEnd_toStartOf="@id/columnSalida"
+            app:layout_constraintTop_toBottomOf="@id/divisorHoras">
 
-        <TextView
-            android:id="@+id/tvHoraEntrada"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/pharmadix_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/labelEntrada" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ENTRADA"
+                android:textColor="@color/text_secondary"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
 
-        <!-- Hora Salida -->
-        <TextView
-            android:id="@+id/labelSalida"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvHoraEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/pharmadix_primary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:text="--:--" />
+
+        </LinearLayout>
+
+        <!-- ===== COLUMNA SALIDA ===== -->
+        <LinearLayout
+            android:id="@+id/columnSalida"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:layout_marginTop="8dp"
-            android:text="SALIDA"
-            android:textColor="@color/text_secondary"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/labelTotal"
-            app:layout_constraintStart_toEndOf="@id/tvHoraEntrada"
-            app:layout_constraintTop_toBottomOf="@id/divisor" />
+            app:layout_constraintStart_toEndOf="@id/columnEntrada"
+            app:layout_constraintEnd_toStartOf="@id/columnTotal"
+            app:layout_constraintTop_toBottomOf="@id/divisorHoras">
 
-        <TextView
-            android:id="@+id/tvHoraSalida"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SALIDA"
+                android:textColor="@color/text_secondary"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+
+            <TextView
+                android:id="@+id/tvHoraSalida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/pharmadix_accent"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:text="--:--" />
+
+        </LinearLayout>
+
+        <!-- ===== COLUMNA TOTAL HORAS ===== -->
+        <LinearLayout
+            android:id="@+id/columnTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/pharmadix_accent"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/labelSalida"
-            app:layout_constraintTop_toBottomOf="@id/labelSalida" />
-
-        <!-- Total horas -->
-        <TextView
-            android:id="@+id/labelTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginTop="8dp"
-            android:text="TOTAL"
-            android:textColor="@color/text_secondary"
-            android:textSize="11sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divisor" />
+            app:layout_constraintTop_toBottomOf="@id/divisorHoras">
 
-        <TextView
-            android:id="@+id/tvHorasTotales"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/pharmadix_green"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/labelTotal" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOTAL"
+                android:textColor="@color/text_secondary"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+
+            <TextView
+                android:id="@+id/tvHorasTotales"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/pharmadix_green"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:text="--" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

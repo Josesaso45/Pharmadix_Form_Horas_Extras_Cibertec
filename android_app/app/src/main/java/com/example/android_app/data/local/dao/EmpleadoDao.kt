@@ -29,4 +29,7 @@ interface EmpleadoDao {
 
     @Query("SELECT * FROM empleados WHERE activo = 1 ORDER BY nombre ASC")
     fun obtenerActivos(): LiveData<List<Empleado>>
+
+    @Query("SELECT * FROM empleados")
+    suspend fun obtenerTodosSincrono(): List<Empleado>
 }

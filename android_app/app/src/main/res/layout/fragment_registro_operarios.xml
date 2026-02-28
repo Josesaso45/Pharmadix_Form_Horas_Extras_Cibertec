@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    fragment_registro_operarios.xml
+    Diseño basado en Stitch: "Registro de Operarios (Optimized Vertical Tablet)"
+    Screen ID: d26ba961e2c54366b246aabb73724b0c
+    Project: Pharmadix Times – App Android MVP (17039988028003338139)
+-->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,125 +12,236 @@
     android:layout_height="match_parent"
     android:background="@color/surface_background">
 
-    <!-- AppBar con info de la hoja -->
+    <!-- ===== APP BAR (diseño Stitch: header azul oscuro con nombre de hoja) ===== -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/pharmadix_primary"
+        app:elevation="4dp">
 
+        <!-- Toolbar principal -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/pharmadix_primary"
-            app:title="@string/registro_titulo"
+            app:title="Registro de Operarios"
             app:titleTextColor="@color/white"
-            app:navigationIconTint="@color/white" />
+            app:subtitle="Pharmadix Times"
+            app:subtitleTextColor="#CCFFFFFF"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/white"
+            app:menu="@menu/menu_registro" />
 
-        <!-- Barra de info de la hoja seleccionada -->
+        <!-- ===== PANEL DE ESTADÍSTICAS (Stitch: 3 chips de conteo en línea) ===== -->
         <LinearLayout
-            android:id="@+id/layoutInfoHoja"
+            android:id="@+id/layoutEstadisticas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/pharmadix_primary_light"
+            android:background="@color/pharmadix_primary_dark"
             android:orientation="horizontal"
             android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp">
+            android:paddingVertical="8dp"
+            android:gravity="center_vertical">
 
+            <!-- Info de la hoja -->
             <TextView
-                android:id="@+id/tvNombreProducto"
+                android:id="@+id/tvNumeroHoja"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/white"
                 android:textSize="13sp"
-                android:text="Producto: --" />
+                android:textStyle="bold"
+                android:text="Hoja: --" />
 
-            <TextView
-                android:id="@+id/tvTurno"
+            <!-- Chip: EN_PROCESO -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEnProceso"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#CCFFFFFF"
-                android:textSize="13sp"
-                android:text="Turno: --" />
+                android:layout_marginEnd="6dp"
+                android:text="0 en proceso"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:chipBackgroundColor="@color/estado_en_proceso"
+                app:chipMinHeight="32dp"
+                app:chipStartPadding="8dp"
+                app:chipEndPadding="8dp" />
+
+            <!-- Chip: FINALIZADOS -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipFinalizados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 finalizados"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:chipBackgroundColor="@color/estado_finalizado"
+                app:chipMinHeight="32dp"
+                app:chipStartPadding="8dp"
+                app:chipEndPadding="8dp" />
 
         </LinearLayout>
 
+        <!-- ===== BARRA DE BÚSQUEDA (Stitch: campo de búsqueda con icono lupa) ===== -->
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/searchBarOperarios"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="8dp"
+            android:hint="Buscar por nombre o gafete..."
+            app:navigationIcon="@drawable/ic_search"
+            app:tint="@color/pharmadix_primary"
+            android:background="@android:color/white" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Contenido principal -->
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Botones de acción rápida -->
+        <!-- Encabezado de sección (Stitch: "Operarios en Línea" con line) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="12dp"
-            android:gravity="center">
+            android:paddingHorizontal="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="6dp"
+            android:gravity="center_vertical">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnBuscarManual"
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                android:text="@string/registro_buscar_manual"
-                app:icon="@drawable/ic_search"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                app:iconGravity="start" />
+                android:text="Operarios en Línea"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/text_primary" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCerrarHoja"
-                android:layout_width="0dp"
+            <!-- Contador total -->
+            <TextView
+                android:id="@+id/tvTotalOperarios"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:text="@string/registro_cerrar_hoja"
-                android:backgroundTint="@color/pharmadix_accent"
-                app:icon="@drawable/ic_check"
-                app:iconGravity="start" />
+                android:text="0 registrados"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
 
         </LinearLayout>
 
-        <!-- Encabezado de la lista -->
-        <TextView
+        <!-- Divider -->
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingBottom="8dp"
-            android:text="Operarios Registrados"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textColor="@color/text_primary" />
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="@color/divider_color" />
 
-        <!-- RecyclerView principal – patrón Cibertec Sesión 3 -->
+        <!-- ===== RECYCLERVIEW PRINCIPAL (Stitch: lista vertical de cards con avatar) ===== -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewOperarios"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingBottom="80dp" />
+            android:paddingBottom="88dp" />
+
+        <!-- Estado vacío (Stitch: empty state con icono) -->
+        <LinearLayout
+            android:id="@+id/layoutEmptyState"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_grupo_operarios"
+                android:alpha="0.3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Sin operarios registrados"
+                android:textSize="16sp"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Usa el botón QR para registrar el primer operario"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:gravity="center" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <!-- FAB: Escanear QR (siempre visible) -->
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <!-- ===== BARRA INFERIOR DE ACCIONES (Stitch: 2 botones en row fijo al fondo) ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:padding="12dp">
+
+        <!-- Botón: Buscar Manual -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBuscarManual"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:text="Buscar Manual"
+            app:icon="@drawable/ic_search"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            app:strokeColor="@color/pharmadix_primary"
+            android:textColor="@color/pharmadix_primary"
+            app:iconTint="@color/pharmadix_primary"
+            app:iconGravity="start" />
+
+        <!-- Botón: Cerrar Hoja -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCerrarHoja"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:text="Cerrar Hoja"
+            android:backgroundTint="@color/pharmadix_accent"
+            app:icon="@drawable/ic_check"
+            app:iconGravity="start"
+            android:textColor="@color/white"
+            app:iconTint="@color/white" />
+
+    </LinearLayout>
+
+    <!-- ===== FAB: ESCANEAR QR (Stitch: FAB circular azul, esquina inferior derecha) ===== -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEscanearQr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:text="@string/registro_escanear_qr"
-        app:icon="@drawable/ic_qr_code"
+        android:layout_margin="80dp"
+        android:contentDescription="Escanear QR"
+        app:srcCompat="@drawable/ic_qr_code"
         android:backgroundTint="@color/pharmadix_primary"
-        android:textColor="@color/white"
-        app:iconTint="@color/white"
-        app:layout_anchorGravity="bottom|end" />
+        app:tint="@color/white"
+        app:fabSize="normal" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

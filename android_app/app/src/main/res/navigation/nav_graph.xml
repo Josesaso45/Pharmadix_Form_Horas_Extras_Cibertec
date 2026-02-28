@@ -2,11 +2,27 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/registroOperariosFragment">
+    app:startDestination="@id/seleccionHojaFragment">
+
+    <fragment
+        android:id="@+id/seleccionHojaFragment"
+        android:name="com.example.android_app.ui.registro.SeleccionHojaFragment"
+        android:label="Selección de Hoja de Tiempo">
+        
+        <action
+            android:id="@+id/action_seleccionHoja_to_registro"
+            app:destination="@id/registroOperariosFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/registroOperariosFragment"
         android:name="com.example.android_app.ui.registro.RegistroOperariosFragment"
-        android:label="Registro de Operarios" />
+        android:label="Registro de Operarios">
+        
+        <argument
+            android:name="hojaId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
 </navigation>

@@ -15,6 +15,7 @@
 | **Año** | 2026 |
 | **Proyecto** | Pharmadix Times – Sistema de Control de Tiempos de Producción |
 | **Tecnología Principal** | Android Nativo (Kotlin + XML Views, sin Jetpack Compose) |
+| **Repositorio GitHub** | [https://github.com/Josesaso45/Pharmadix_Form_Horas_Extras_Cibertec](https://github.com/Josesaso45/Pharmadix_Form_Horas_Extras_Cibertec) |
 
 ---
 
@@ -939,6 +940,26 @@ class RegistroOperarioAdapter(
     }
 }
 ```
+
+---
+
+### 7.4 Prototipos de Alta Fidelidad (Stitch Mockups)
+
+Para garantizar una experiencia de usuario premium y alineada con los estándares de **Material Design 3**, se utilizaron mockups de alta fidelidad generados y validados con **Stitch MCP**.
+
+#### 7.4.1 Acceso al Proyecto de Diseño
+El diseño interactivo completo puede visualizarse en el siguiente enlace de Stitch:
+**Proyecto:** [Pharmadix Times – App Android MVP](https://stitch.google.com/p/17039988028003338139)
+
+#### 7.4.2 Pantallas Principales
+
+| Pantalla | Descripción | Vista Previa |
+|---|---|---|
+| **Login Premium** | Interfaz de acceso con validación de credenciales y branding corporativo. | ![Mockup Login](mockup_login.png) |
+| **Registro de Operarios (Mobile)** | Lista de operarios con estados visuales y escaneo QR integrado. | ![Mockup Registro Mobile](mockup_registro_operarios.png) |
+| **Registro de Operarios (Tablet Optimized)** | Versión optimizada para tablets en planta, con panel de estadísticas y búsqueda mejorada. | ![Mockup Registro Tablet](mockup_registro_tablet.png) |
+
+> **Nota:** El diseño final aplicado en el código XML (`fragment_registro_operarios.xml`) se basa estrictamente en la versión **Tablet Optimized** por ofrecer una mejor visualización de la información crítica en planta.
 
 ---
 

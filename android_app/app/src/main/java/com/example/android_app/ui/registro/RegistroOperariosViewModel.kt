@@ -37,11 +37,69 @@ class RegistroOperariosViewModel(application: Application) : AndroidViewModel(ap
     private val _uiState = MutableLiveData<UiState>(UiState.Idle)
     val uiState: LiveData<UiState> = _uiState
 
+    // ── Catálogo de empleados (para búsqueda manual) ────────────────────
+    val empleadosCatalogo: LiveData<List<Empleado>> = db.empleadoDao().obtenerActivos()
+
+    init {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            val count = db.empleadoDao().obtenerTodosSincrono().size
+            if (count == 0) {
+                db.empleadoDao().insertarAll(listOf(
+                    Empleado(1, "Juan Carlos Pérez", "EMP-1234", "Envasado", "Operario de Envasado", "ACTIVO"),
+                    Empleado(2, "María Elena López", "EMP-5678", "Etiquetado", "Operaria de Etiquetado", "ACTIVO"),
+                    Empleado(3, "Carlos Alberto García", "EMP-9012", "Empaque", "Operario de Empaque", "ACTIVO"),
+                    Empleado(4, "Ana Patricia Martínez", "EMP-3456", "Calidad", "Operaria de Control de Calidad", "ACTIVO"),
+                    Empleado(5, "Roberto Hernández", "EMP-7890", "Limpieza", "Operario de Limpieza", "ACTIVO")
+                ))
+            }
+        }
+    }
+
+    // ── Lista de Hojas de Tiempo ──────────────────────────────────────────
+    val hojasActivas: LiveData<List<com.example.android_app.data.local.entity.HojaTiempo>> = db.hojaTiempoDao().obtenerTodas()
+
     // ── Hoja de tiempo activa ─────────────────────────────────────────────
     private val _hojaId = MutableLiveData<Int>(0)
 
+    fun crearHojaVacia(hojaId: Int, numero: String, onComplete: (Int) -> Unit) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            val nuevaHoja = com.example.android_app.data.local.entity.HojaTiempo(
+                id = hojaId,
+                numeroHoja = numero,
+                loteId = null,
+                tomadorId = 1, // Simulando usuario logueado
+                fechaEmision = "2024-11-20T10:00:00Z",
+                turno = "DIA",
+                estado = "ABIERTA"
+            )
+            db.hojaTiempoDao().insertar(nuevaHoja)
+            
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                onComplete(hojaId)
+            }
+        }
+    }
+
     // Registros de la hoja activa (observa Room en tiempo real)
-    fun obtenerRegistros(hojaId: Int) = repository.obtenerRegistrosPorHoja(hojaId)
+    // Se combina con la info de empleados para el Adapter
+    fun obtenerRegistrosConEmpleado(hojaId: Int): LiveData<List<RegistroOperarioAdapter.RegistroConEmpleado>> {
+        val ld = MutableLiveData<List<RegistroOperarioAdapter.RegistroConEmpleado>>()
+        
+        // Observamos los registros y cuando cambian, buscamos sus empleados
+        repository.obtenerRegistrosPorHoja(hojaId).observeForever { registros ->
+            viewModelScope.launch {
+                val empleados = db.empleadoDao().obtenerTodosSincrono()
+                val map = empleados.associateBy { it.id }
+                val listaCombinada = registros.mapNotNull { reg ->
+                    map[reg.empleadoId]?.let { emp ->
+                        RegistroOperarioAdapter.RegistroConEmpleado(reg, emp)
+                    }
+                }
+                ld.postValue(listaCombinada)
+            }
+        }
+        return ld
+    }
 
     // ── Buscar operario por gafete (QR) ───────────────────────────────────
     fun procesarQr(gafete: String, hojaId: Int, actividad: String = "Operación General") {

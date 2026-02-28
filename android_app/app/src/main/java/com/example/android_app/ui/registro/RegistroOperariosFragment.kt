@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_app.databinding.FragmentRegistroOperariosBinding
 import com.example.android_app.ui.registro.adapter.RegistroOperarioAdapter
+import com.example.android_app.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.journeyapps.barcodescanner.ScanContract
@@ -31,6 +33,9 @@ class RegistroOperariosFragment : Fragment() {
     private val qrLauncher = registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
         if (result.contents != null) {
             viewModel.procesarQr(gafete = result.contents, hojaId = hojaId)
+        } else if (result.originalIntent?.getBooleanExtra("MANUAL_SEARCH", false) == true) {
+            // El usuario presionó el botón de "Buscar manualmente" dentro de la cámara
+            mostrarDialogoBusquedaManual()
         }
     }
 
@@ -41,17 +46,60 @@ class RegistroOperariosFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        configurarToolbar()
         configurarRecyclerView()
         configurarBotones()
         observarEstado()
         observarRegistros()
     }
 
+    private fun configurarToolbar() {
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+        
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_logout -> {
+                    confirmarCerrarSesion()
+                    true
+                }
+                R.id.action_sync -> {
+                    Snackbar.make(binding.root, "Sincronizando...", Snackbar.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun confirmarCerrarSesion() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Cerrar Sesión")
+            .setMessage("¿Estás seguro de que deseas salir del sistema?")
+            .setPositiveButton("Cerrar Sesión") { _, _ ->
+                ejecutarLogout()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun ejecutarLogout() {
+        // En una app real aquí limpiaríamos SharedPreferences/Token
+        // com.example.android_app.data.remote.RetrofitClient.setToken("")
+        
+        Snackbar.make(binding.root, "Sesión cerrada", Snackbar.LENGTH_SHORT).show()
+        
+        // Simular navegación al Login (si existiera en el grafo)
+        // requireActivity().finish() 
+    }
+
     private fun configurarRecyclerView() {
         adapter = RegistroOperarioAdapter { registro, empleado ->
             // Diálogo de acción al hacer clic en un item del RecyclerView
+            val currentHoja = if (hojaId == 0) 1 else hojaId // Fix para testeo
             when (registro.estado) {
-                "PENDIENTE" -> mostrarDialogoEntrada(hojaId, empleado.id, empleado.nombre)
+                "PENDIENTE" -> mostrarDialogoEntrada(currentHoja, empleado.id, empleado.nombre)
                 "EN_PROCESO" -> mostrarDialogoSalida(registro, empleado.nombre)
                 "FINALIZADO" -> mostrarResumen(registro, empleado.nombre)
             }
@@ -63,10 +111,24 @@ class RegistroOperariosFragment : Fragment() {
     }
 
     private fun observarRegistros() {
-        if (hojaId > 0) {
-            viewModel.obtenerRegistros(hojaId).observe(viewLifecycleOwner) { registros ->
-                // Aquí habría que unir con empleados - simplificado para MVP
-            }
+        // En ambiente de desarrollo/test, si no hay ID (0) forzamos el 1 
+        // para poder ver los datos del seed.
+        val targetHojaId = if (hojaId == 0) 1 else hojaId
+        
+        viewModel.obtenerRegistrosConEmpleado(targetHojaId).observe(viewLifecycleOwner) { lista ->
+            adapter.actualizarLista(lista)
+            
+            // Actualizar contadores en la UI
+            val enProceso = lista.count { it.registro.estado == "EN_PROCESO" }
+            val finalizados = lista.count { it.registro.estado == "FINALIZADO" }
+            
+            binding.chipEnProceso.text = "$enProceso en proceso"
+            binding.chipFinalizados.text = "$finalizados finalizados"
+            binding.tvTotalOperarios.text = "${lista.size} registrados"
+            binding.tvNumeroHoja.text = "Hoja: #$targetHojaId"
+            
+            // Mostrar estado vacío si no hay registros
+            binding.layoutEmptyState.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
@@ -114,21 +176,11 @@ class RegistroOperariosFragment : Fragment() {
 
     // ── Diálogo Entrada ───────────────────────────────────────────────────
     private fun mostrarDialogoEntrada(hojaId: Int, empleadoId: Int, nombre: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Registrar Entrada")
-            .setMessage("¿Confirmar entrada de\n$nombre?")
-            .setPositiveButton("✅ Confirmar Entrada") { _, _ ->
-                lifecycleScope.launch {
-                    val empleado = viewModel.buscarEmpleado(empleadoId)
-                    if (empleado != null) {
-                        viewModel.registrarEntrada(hojaId, empleado)
-                    } else {
-                        Snackbar.make(binding.root, "Operario no encontrado", Snackbar.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
+        val bottomSheet = RegistrarTiempoBottomSheet(hojaId, empleadoId) { targetHoja, empleado, actividad ->
+            viewModel.registrarEntrada(targetHoja, empleado)
+            Snackbar.make(binding.root, "Entrada registrada - $actividad", Snackbar.LENGTH_SHORT).show()
+        }
+        bottomSheet.show(childFragmentManager, "RegistrarTiempoSheet")
     }
 
     // ── Diálogo Salida ────────────────────────────────────────────────────
@@ -159,15 +211,38 @@ class RegistroOperariosFragment : Fragment() {
 
     private fun configurarBotones() {
         binding.fabEscanearQr.setOnClickListener {
+            val targetHojaId = if (hojaId == 0) 1 else hojaId
             qrLauncher.launch(ScanOptions().apply {
                 setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-                setPrompt("Apunte al QR del gafete del operario")
+                setPrompt("Apunte al QR del gafete (Hoja $targetHojaId)")
                 setBeepEnabled(true)
+                setCaptureActivity(CustomScannerActivity::class.java)
             })
         }
+        
         binding.btnBuscarManual.setOnClickListener {
-            Snackbar.make(binding.root, "Búsqueda manual (próxima iteración)", Snackbar.LENGTH_SHORT).show()
+            mostrarDialogoBusquedaManual()
         }
+
+        binding.btnCerrarHoja.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Cerrar Hoja")
+                .setMessage("¿Estás seguro de finalizar esta hoja de tiempo?")
+                .setPositiveButton("Cerrar Hoja") { _, _ ->
+                    // Lógica para cerrar hoja
+                    Snackbar.make(binding.root, "Hoja cerrada exitosamente", Snackbar.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+    }
+
+    private fun mostrarDialogoBusquedaManual() {
+        val targetHojaId = if (hojaId == 0) 1 else hojaId
+        val bottomSheet = BusquedaManualBottomSheet { empleado ->
+            mostrarDialogoEntrada(targetHojaId, empleado.id, empleado.nombre)
+        }
+        bottomSheet.show(childFragmentManager, "BusquedaManualSheet")
     }
 
     override fun onDestroyView() {

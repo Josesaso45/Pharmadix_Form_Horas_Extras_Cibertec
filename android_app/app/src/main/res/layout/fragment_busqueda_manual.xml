@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/apk/res-tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_bg"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
+
+    <!-- Handle drag -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:background="#E0E0E0"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar Operario"
+        android:textColor="@color/pharmadix_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Módulo de Filtro -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="16dp"
+        app:startIconDrawable="@android:drawable/ic_menu_search"
+        app:hintTextColor="@color/pharmadix_primary"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_buscar_operario"
+            android:textColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="DNI, nombre o gafete..." />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Estado de carga o vacío -->
+    <TextView
+        android:id="@+id/tv_empty_catalog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No hay operarios disponibles."
+        android:textAlignment="center"
+        android:textColor="@color/text_secondary"
+        android:padding="24dp"
+        android:visibility="gone"/>
+
+    <!-- Lista -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_operarios_manual"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_operario_busqueda"/>
+
+</LinearLayout>

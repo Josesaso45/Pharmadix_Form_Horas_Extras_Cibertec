@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QR Gafete Scanner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a227f",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121320",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Space Grotesk", sans-serif;
+        }
+        .scanner-overlay {
+            background: rgba(18, 19, 32, 0.6);
+        }
+        .scanner-frame {
+            box-shadow: 0 0 0 100vmax rgba(18, 19, 32, 0.6);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-slate-100 antialiased overflow-hidden">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Live Viewfinder Background -->
+<div class="absolute inset-0 z-0">
+<img class="h-full w-full object-cover opacity-40 grayscale" data-alt="Blurred industrial pharmaceutical manufacturing plant background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0u5xCVhN9PrP5rV7YN__wxOjY4bX47pN-7b8tNkH0Qz8witmfcRWUtD5p0pc3O54Medbqu0OVU6CbV0LIgzx4IPEntks2R1zrQVmKlcoEzKrlzLf-jjc58vwiEX9tKWEUQ7KmHwiOYeyhQvquWFocD7YvcxpdNJiZRawQzifr4x80KVNpnyoA08jAMnALBUG1x4XKbCNYippZjEi81vNt150qSyUUnZPY6lbz2ARASU0gcVfXDuvegIhTKzuh8qFbMu9xfNxRbXSd"/>
+</div>
+<!-- Top Navigation -->
+<div class="relative z-20 flex items-center justify-between p-4 pt-12">
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase tracking-widest text-primary/80">Pharmadix Times</span>
+<h1 class="text-xl font-bold leading-tight tracking-tight text-white">QR Gafete Scanner</h1>
+</div>
+<button class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800/60 text-white backdrop-blur-md">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Scanner Viewport -->
+<div class="relative z-10 flex flex-1 flex-col items-center justify-center">
+<div class="relative h-64 w-64 md:h-80 md:w-80">
+<!-- Framing Corners -->
+<div class="absolute left-0 top-0 h-8 w-8 border-l-4 border-t-4 border-primary rounded-tl-lg"></div>
+<div class="absolute right-0 top-0 h-8 w-8 border-r-4 border-t-4 border-primary rounded-tr-lg"></div>
+<div class="absolute bottom-0 left-0 h-8 w-8 border-l-4 border-b-4 border-primary rounded-bl-lg"></div>
+<div class="absolute bottom-0 right-0 h-8 w-8 border-r-4 border-b-4 border-primary rounded-br-lg"></div>
+<!-- Scanning Animation Line (Static Representation) -->
+<div class="absolute left-4 right-4 top-1/2 h-0.5 bg-primary/40 shadow-[0_0_15px_rgba(26,34,127,0.8)]"></div>
+<!-- Clear Center -->
+<div class="scanner-frame h-full w-full rounded-lg"></div>
+</div>
+<p class="mt-12 max-w-[280px] text-center text-lg font-medium text-slate-100 drop-shadow-md">
+                Apunta al código QR del gafete del operario
+            </p>
+</div>
+<!-- Bottom Actions -->
+<div class="relative z-20 flex flex-col items-center gap-6 p-8 pb-12">
+<div class="flex items-center gap-8">
+<button class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800/60 text-white backdrop-blur-md">
+<span class="material-symbols-outlined">flashlight_on</span>
+</button>
+<button class="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/40">
+<span class="material-symbols-outlined text-4xl">qr_code_scanner</span>
+</button>
+<button class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800/60 text-white backdrop-blur-md">
+<span class="material-symbols-outlined">image</span>
+</button>
+</div>
+<button class="flex min-w-[200px] items-center justify-center gap-2 rounded-xl border border-slate-400/30 bg-background-dark/40 px-6 py-3 text-sm font-bold text-white backdrop-blur-lg">
+<span class="material-symbols-outlined text-sm text-primary">keyboard</span>
+<span>Buscar manualmente</span>
+</button>
+<div class="h-1.5 w-32 rounded-full bg-slate-500/40"></div>
+</div>
+<!-- Status Bar Mimic -->
+<div class="absolute top-0 left-0 right-0 h-10 flex items-center justify-between px-6 z-30">
+<span class="text-xs font-bold text-white">9:41</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-white">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-xs text-white">wifi</span>
+<span class="material-symbols-outlined text-xs text-white">battery_full</span>
+</div>
+</div>
+</div>
+</body></html>

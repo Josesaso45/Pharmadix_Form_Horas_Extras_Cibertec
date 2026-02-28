@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_bg"
+    android:padding="24dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrar Tiempo"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="start"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Avatar Placeholder -->
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/circulo_oscuro_bg"
+        android:backgroundTint="#EAEAF4">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_myplaces"
+            android:tint="@color/pharmadix_primary"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_nombre_registrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Juan Carlos Pérez"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_detalle_registrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#1234 • Operario de Envasado"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sin registro"
+        android:textColor="#D32F2F"
+        android:background="#FFCDD2"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:text="Actividad"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_actividad"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/hoja_estado_bg"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btn_registrar_entrada"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="→] REGISTRAR ENTRADA"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#81C784"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btn_cerrar_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X Cerrar"
+        android:textColor="@android:color/black"
+        style="?android:attr/borderlessButtonStyle" />
+
+</LinearLayout>
