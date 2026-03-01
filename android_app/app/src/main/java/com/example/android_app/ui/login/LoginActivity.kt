@@ -53,5 +53,9 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.etPassword.text?.toString() ?: ""
             viewModel.login(usuario, password)
         }
+
+        binding.tvCrearCuenta.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
     }
 }

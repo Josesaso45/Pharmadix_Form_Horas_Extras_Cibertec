@@ -55,6 +55,59 @@ export async function authRoutes(fastify: FastifyInstance) {
         }
     });
 
+    // POST /auth/register — registro de nuevo usuario (tomador)
+    const registerSchema = z.object({
+        usuario: z.string().min(3, 'El usuario debe tener al menos 3 caracteres'),
+        nombre: z.string().min(2, 'El nombre es requerido'),
+        password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    });
+
+    fastify.post('/auth/register', async (request: FastifyRequest, reply: FastifyReply) => {
+        try {
+            const body = registerSchema.parse(request.body);
+
+            // Verificar si el usuario ya existe
+            const existente = await prisma.usuario.findUnique({
+                where: { usuario: body.usuario },
+            });
+
+            if (existente) {
+                return reply.status(409).send({ error: 'El usuario ya existe' });
+            }
+
+            // Hash de la contraseña
+            const hashedPassword = await bcrypt.hash(body.password, 10);
+
+            // Crear usuario con rol TOMADOR
+            const nuevoUsuario = await prisma.usuario.create({
+                data: {
+                    usuario: body.usuario,
+                    nombre: body.nombre,
+                    email: `${body.usuario}@pharmadix.com`,
+                    password: hashedPassword,
+                    rol: 'TOMADOR',
+                    activo: true,
+                },
+            });
+
+            return reply.status(201).send({
+                mensaje: 'Usuario creado exitosamente',
+                usuario: {
+                    id: nuevoUsuario.id,
+                    nombre: nuevoUsuario.nombre,
+                    usuario: nuevoUsuario.usuario,
+                    rol: nuevoUsuario.rol,
+                },
+            });
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+                return reply.status(400).send({ error: 'Datos inválidos', detalles: error.errors });
+            }
+            fastify.log.error(error);
+            return reply.status(500).send({ error: 'Error interno del servidor' });
+        }
+    });
+
     // GET /auth/me — verificar token (útil para la app)
     fastify.get(
         '/auth/me',

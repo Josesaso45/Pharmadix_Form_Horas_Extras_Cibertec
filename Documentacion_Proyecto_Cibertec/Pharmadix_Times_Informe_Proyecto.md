@@ -704,29 +704,99 @@ data class RegistroTiempoResponse(
 
 ### 7.1 Flujo de pantallas MVP
 
+![Flujo completo de pantallas](flujo_pantallas_completo.png)
+
 ```
-LoginActivity
-     │
-     ▼ (login exitoso)
-DashboardActivity
-     │  (contiene NavHostFragment)
-     ├──▶ SeleccionHojaFragment (lista de hojas)
+LoginActivity ──────────────────────────────────────────────────────
+     │                        │
+     │ (login exitoso)        │ "¿No tienes cuenta? Crear Cuenta"
+     ▼                        ▼
+DashboardActivity      RegisterActivity (NUEVA)
+     │                        │
+     │  (NavHostFragment)     │ (Registro exitoso → Diálogo ¡Cuenta Creada!)
+     │                        │
+     ├──▶ SeleccionHoja       └──▶ Vuelve a LoginActivity
      │         │
      │         ▼ (selección de hoja)
      └──▶ RegistroOperariosFragment
                │
                ├── RecyclerView (lista de operarios - estado visual)
-               ├── FAB: Escanear QR (ZXing)
-               └── Botón: Buscar Manual (Dialog/BottomSheet)
+               ├── FAB: Escanear QR (ZXing) → RegistrarTiempoBottomSheet
+               ├── Botón: Buscar Manual → BusquedaManualBottomSheet → RegistrarTiempoBottomSheet
+               └── Botón: Cerrar Hoja → Diálogo Cerrar → SeleccionHoja
 ```
+
+### 7.1.1 Pantalla de Registro de Nuevo Usuario (RegisterActivity)
+
+> **Diseño en Stitch** – Screen ID: `46b0bb2ebe884249ad47fe835bc4cd74`  
+> **Pantalla de éxito** – Screen ID: `4382cea5db544a3890d7f89a2efd1ff6`
+
+La pantalla de **Registro de Nuevo Usuario** permite al tomador de tiempos crear su propia cuenta directamente desde la aplicación móvil, sin necesidad de intervención del administrador.
+
+**Flujo del usuario:**
+1. En la pantalla de Login, toca **"¿No tienes cuenta? Crear Cuenta"**
+2. Se abre `RegisterActivity` con el formulario de registro
+3. Ingresa: **Usuario** (ej: `tomador2`), **Nombre completo**, **Contraseña** y **Confirmar Contraseña**
+4. Presiona **"CREAR CUENTA"**
+5. La app envía `POST /auth/register` al backend
+6. Si es exitoso, muestra el diálogo "¡Cuenta Creada!" con botón **"INICIAR SESIÓN"**
+7. Al confirmar, vuelve a LoginActivity donde puede ingresar con sus nuevas credenciales
+
+**Validaciones implementadas (RegisterViewModel):**
+
+| Validación | Mensaje de error |
+|---|---|
+| Campos vacíos | "Complete todos los campos" |
+| Usuario < 3 caracteres | "El usuario debe tener al menos 3 caracteres" |
+| Contraseña < 6 caracteres | "La contraseña debe tener al menos 6 caracteres" |
+| Contraseñas no coinciden | "Las contraseñas no coinciden" |
+| Usuario ya existe (HTTP 409) | "El usuario 'X' ya existe" |
+
+**Endpoint Backend (`POST /auth/register`):**
+
+```json
+// Request
+{
+  "usuario": "tomador2",
+  "nombre": "Juan Pérez",
+  "password": "miPassword123"
+}
+
+// Response (201 Created)
+{
+  "mensaje": "Usuario creado exitosamente",
+  "usuario": {
+    "id": 3,
+    "nombre": "Juan Pérez",
+    "usuario": "tomador2",
+    "rol": "TOMADOR"
+  }
+}
+```
+
+**Archivos involucrados:**
+
+| Archivo | Descripción |
+|---|---|
+| `activity_register.xml` | Layout del formulario de registro (basado en diseño Stitch) |
+| `RegisterActivity.kt` | Activity que gestiona la UI y observa el ViewModel |
+| `RegisterViewModel.kt` | Lógica de validación y llamada al API |
+| `ApiModels.kt` | Modelos `RegisterRequest` y `RegisterResponse` |
+| `ApiService.kt` | Endpoint `POST auth/register` en Retrofit |
+| `auth.ts` (backend) | Ruta Fastify que crea el usuario con bcrypt |
 
 ### 7.2 Componentes XML por pantalla
 
 | Layout | Componentes Material Design 3 |
 |---|---|
-| `activity_login.xml` | `TextInputLayout`, `TextInputEditText`, `MaterialButton`, `ProgressBar` |
+| `activity_login.xml` | `TextInputLayout`, `TextInputEditText`, `MaterialButton`, `ProgressBar`, Link "Crear Cuenta" |
+| `activity_register.xml` | `TextInputLayout` ×4, `MaterialButton`, `ProgressBar`, Links de navegación |
+| `fragment_seleccion_hoja.xml` | `RecyclerView`, `MaterialButton`, `Toolbar` |
 | `fragment_registro_operarios.xml` | `AppBarLayout`, `RecyclerView`, `FloatingActionButton`, `MaterialButton` |
 | `item_registro_operario.xml` | `MaterialCardView`, `Chip` (estado), `TextView`, `ConstraintLayout` |
+| `fragment_busqueda_manual.xml` | `BottomSheet`, `EditText` búsqueda, `RecyclerView` |
+| `fragment_registrar_tiempo_sheet.xml` | `BottomSheet`, `Spinner` actividad, `MaterialButton` verde |
+| `dialog_cerrar_hoja.xml` | Diálogo custom Material con botones "Cancelar" / "Cerrar Hoja" |
 
 ---
 
@@ -1392,11 +1462,16 @@ stateDiagram
 
 Los siguientes mockups fueron diseñados con **Google Stitch** siguiendo los principios de **Material Design 3** y la identidad visual corporativa de Pharmadix (azul marino `#1A237E` + degradado a `#534BAE`).
 
-### D.1 Pantalla de Login – `LoginActivity`
+### D.1 Pantalla de Login y Registro de Usuario
 
-> **Flujo:** App launch → `LoginActivity` → Validación JWT → `DashboardActivity`
+> **Flujo:** App launch → `LoginActivity` → (Opcional: `RegisterActivity`) → Validación JWT → `DashboardActivity`
 
 ![Mockup Pharmadix Times Login](mockup_login.png)
+
+#### Creación de Usuario (Nuevos Mockups)
+
+![Mockup Registro de Nuevo Usuario](mockup_registro_usuario.png)
+![Mockup Registro Exitoso](mockup_registro_exitoso.png)
 
 | Componente UI | Tipo | Descripción |
 |---|---|---|
@@ -1414,7 +1489,7 @@ Los siguientes mockups fueron diseñados con **Google Stitch** siguiendo los pri
 
 > **Flujo:** `DashboardActivity` → NavComponent → `RegistroOperariosFragment`
 
-![Mockup Registro de Operarios](mockup_registro_operarios.png)
+![Mockup Registro de Operarios](mockup_operarios.png)
 
 | Componente UI | Tipo | Descripción |
 |---|---|---|
@@ -1442,6 +1517,16 @@ stateDiagram-v2
     EN_PROCESO : Chip Naranja - Hora entrada registrada
     FINALIZADO : Chip Verde - Horas calculadas
 ```
+
+---
+
+### D.3 Panel Administrativo Web – `Cálculo de Horas Hombre`
+
+> **Flujo:** Login Administrador → Portal Web (Desktop) → Sección "Cálculo H-H"
+
+![Mockup Panel Administrativo Web](mockup_admin_panel.png)
+
+Este panel de escritorio (creado en ReactJS sobre el backend Fastify) permite al área de finanzas y gerencia calcular automáticamente las horas hombre invertidas por Lote, Proceso, Producto, Área y Presentación de forma masiva para fines contables y de costeo de producción. Incluye botones de exportación a Excel y PDF y gráficos en tiempo real.
 
 ---
 

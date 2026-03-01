@@ -11,7 +11,7 @@ object RetrofitClient {
 
     // TODO: Cambiar a la IP real del servidor antes de publicar
     // Para emulador Android: 10.0.2.2 = localhost del PC
-    private const val BASE_URL = "http://10.0.2.2:3000/"
+    private const val BASE_URL = "http://192.168.1.66:3000/api/"
 
     private var authToken: String = ""
 

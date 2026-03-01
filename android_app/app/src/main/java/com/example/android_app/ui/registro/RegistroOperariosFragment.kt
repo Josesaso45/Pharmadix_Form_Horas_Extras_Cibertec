@@ -139,12 +139,16 @@ class RegistroOperariosFragment : Fragment() {
                     // Mostrar ProgressBar si existe en el layout
                 }
                 is RegistroOperariosViewModel.UiState.Success -> {
-                    // Interpretar mensaje de acción del QR
-                    parsearAccionQr(estado.mensaje)
+                    if (estado.mensaje == "cerrar_hoja_ok") {
+                        com.google.android.material.snackbar.Snackbar.make(binding.root, "Hoja cerrada exitosamente", com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
+                        findNavController().navigateUp()
+                    } else {
+                        parsearAccionQr(estado.mensaje)
+                    }
                     viewModel.resetEstado()
                 }
                 is RegistroOperariosViewModel.UiState.Error -> {
-                    Snackbar.make(binding.root, estado.mensaje, Snackbar.LENGTH_LONG).show()
+                    com.google.android.material.snackbar.Snackbar.make(binding.root, estado.mensaje, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
                     viewModel.resetEstado()
                 }
                 else -> {}
@@ -164,12 +168,11 @@ class RegistroOperariosFragment : Fragment() {
                 val partes = mensaje.split(":")
                 val registroId = partes.getOrNull(1)?.toIntOrNull() ?: return
                 val nombre = partes.getOrNull(2) ?: "Operario"
-                // Buscar registro actual para mostrar diálogo
-                Snackbar.make(binding.root, "Confirmar salida de $nombre", Snackbar.LENGTH_SHORT).show()
+                // Buscar registro y mostrar diálogo de salida
             }
             else -> {
                 if (mensaje.isNotEmpty())
-                    Snackbar.make(binding.root, mensaje, Snackbar.LENGTH_SHORT).show()
+                    com.google.android.material.snackbar.Snackbar.make(binding.root, mensaje, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -178,26 +181,37 @@ class RegistroOperariosFragment : Fragment() {
     private fun mostrarDialogoEntrada(hojaId: Int, empleadoId: Int, nombre: String) {
         val bottomSheet = RegistrarTiempoBottomSheet(hojaId, empleadoId) { targetHoja, empleado, actividad ->
             viewModel.registrarEntrada(targetHoja, empleado)
-            Snackbar.make(binding.root, "Entrada registrada - $actividad", Snackbar.LENGTH_SHORT).show()
+            com.google.android.material.snackbar.Snackbar.make(binding.root, "Entrada registrada - $actividad", com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
         }
         bottomSheet.show(childFragmentManager, "RegistrarTiempoSheet")
     }
 
     // ── Diálogo Salida ────────────────────────────────────────────────────
     private fun mostrarDialogoSalida(registro: com.example.android_app.data.local.entity.RegistroTiempo, nombre: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Registrar Salida")
-            .setMessage("¿Confirmar salida de\n$nombre?\nEntrada: ${registro.horaEntrada}")
-            .setPositiveButton("🔴 Confirmar Salida") { _, _ ->
-                viewModel.registrarSalida(registro)
-            }
-            .setNegativeButton("Cancelar", null)
+        val dialogView = layoutInflater.inflate(com.example.android_app.R.layout.dialog_cerrar_hoja, null)
+        val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
             .show()
+            
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        dialogView.findViewById<android.widget.TextView>(com.example.android_app.R.id.tvTitulo)?.text = "Registrar Salida"
+        dialogView.findViewById<android.widget.TextView>(com.example.android_app.R.id.tvMensaje)?.text = "¿Confirmar salida de\n$nombre?\nEntrada: ${registro.horaEntrada}"
+        val btnCancelar = dialogView.findViewById<android.widget.Button>(com.example.android_app.R.id.btnCancelarCierre)
+        val btnConfirmar = dialogView.findViewById<android.widget.Button>(com.example.android_app.R.id.btnConfirmarCierre)
+        
+        btnConfirmar?.text = "Confirmar Salida"
+
+        btnCancelar?.setOnClickListener { dialog.dismiss() }
+        btnConfirmar?.setOnClickListener {
+            viewModel.registrarSalida(registro)
+            dialog.dismiss()
+        }
     }
 
     // ── Resumen de operario FINALIZADO ────────────────────────────────────
     private fun mostrarResumen(registro: com.example.android_app.data.local.entity.RegistroTiempo, nombre: String) {
-        MaterialAlertDialogBuilder(requireContext())
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
             .setTitle("Resumen de Turno")
             .setMessage(
                 "$nombre\n" +
@@ -212,8 +226,8 @@ class RegistroOperariosFragment : Fragment() {
     private fun configurarBotones() {
         binding.fabEscanearQr.setOnClickListener {
             val targetHojaId = if (hojaId == 0) 1 else hojaId
-            qrLauncher.launch(ScanOptions().apply {
-                setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            qrLauncher.launch(com.journeyapps.barcodescanner.ScanOptions().apply {
+                setDesiredBarcodeFormats(com.journeyapps.barcodescanner.ScanOptions.QR_CODE)
                 setPrompt("Apunte al QR del gafete (Hoja $targetHojaId)")
                 setBeepEnabled(true)
                 setCaptureActivity(CustomScannerActivity::class.java)
@@ -225,15 +239,22 @@ class RegistroOperariosFragment : Fragment() {
         }
 
         binding.btnCerrarHoja.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Cerrar Hoja")
-                .setMessage("¿Estás seguro de finalizar esta hoja de tiempo?")
-                .setPositiveButton("Cerrar Hoja") { _, _ ->
-                    // Lógica para cerrar hoja
-                    Snackbar.make(binding.root, "Hoja cerrada exitosamente", Snackbar.LENGTH_SHORT).show()
-                }
-                .setNegativeButton("Cancelar", null)
+            val dialogView = layoutInflater.inflate(com.example.android_app.R.layout.dialog_cerrar_hoja, null)
+            val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setView(dialogView)
                 .show()
+                
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+            val btnCancelar = dialogView.findViewById<android.widget.Button>(com.example.android_app.R.id.btnCancelarCierre)
+            val btnConfirmar = dialogView.findViewById<android.widget.Button>(com.example.android_app.R.id.btnConfirmarCierre)
+
+            btnCancelar?.setOnClickListener { dialog.dismiss() }
+            btnConfirmar?.setOnClickListener {
+                val targetHojaId = if (hojaId == 0) 1 else hojaId
+                viewModel.cerrarHoja(targetHojaId)
+                dialog.dismiss()
+            }
         }
     }
 

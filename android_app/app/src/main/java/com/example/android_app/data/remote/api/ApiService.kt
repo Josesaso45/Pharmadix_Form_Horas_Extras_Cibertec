@@ -8,6 +8,9 @@ interface ApiService {
     @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
+    @POST("auth/register")
+    suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
+
     @GET("hojas")
     suspend fun obtenerHojas(@Query("tomadorId") tomadorId: Int): Response<List<HojaTiempoResponse>>
 

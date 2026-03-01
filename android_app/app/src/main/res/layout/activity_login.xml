@@ -86,6 +86,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:imeOptions="actionNext"
+                        android:textColor="@color/black"
                         android:autofillHints="username" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -108,6 +109,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:imeOptions="actionDone"
+                        android:textColor="@color/black"
                         android:autofillHints="password" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -137,13 +139,30 @@
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Footer -->
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/login_footer"
-            android:textColor="#80FFFFFF"
-            android:textSize="12sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿No tienes cuenta? "
+                android:textColor="#80FFFFFF"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvCrearCuenta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crear Cuenta"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <Space android:layout_width="0dp" android:layout_height="32dp" />
 

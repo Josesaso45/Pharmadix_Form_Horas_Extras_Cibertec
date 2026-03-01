@@ -49,3 +49,15 @@ data class RegistroTiempoResponse(
     @SerializedName("horasTotales") val horasTotales: Double?,
     @SerializedName("estado") val estado: String
 )
+
+// ── Registro de nuevo usuario ──────────────────────────────
+data class RegisterRequest(
+    @SerializedName("usuario") val usuario: String,
+    @SerializedName("nombre") val nombre: String,
+    @SerializedName("password") val password: String
+)
+
+data class RegisterResponse(
+    @SerializedName("mensaje") val mensaje: String,
+    @SerializedName("usuario") val usuario: UsuarioResponse
+)

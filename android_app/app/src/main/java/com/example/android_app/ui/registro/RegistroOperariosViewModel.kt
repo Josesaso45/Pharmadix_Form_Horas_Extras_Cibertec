@@ -44,12 +44,12 @@ class RegistroOperariosViewModel(application: Application) : AndroidViewModel(ap
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             val count = db.empleadoDao().obtenerTodosSincrono().size
             if (count == 0) {
-                db.empleadoDao().insertarAll(listOf(
-                    Empleado(1, "Juan Carlos Pérez", "EMP-1234", "Envasado", "Operario de Envasado", "ACTIVO"),
-                    Empleado(2, "María Elena López", "EMP-5678", "Etiquetado", "Operaria de Etiquetado", "ACTIVO"),
-                    Empleado(3, "Carlos Alberto García", "EMP-9012", "Empaque", "Operario de Empaque", "ACTIVO"),
-                    Empleado(4, "Ana Patricia Martínez", "EMP-3456", "Calidad", "Operaria de Control de Calidad", "ACTIVO"),
-                    Empleado(5, "Roberto Hernández", "EMP-7890", "Limpieza", "Operario de Limpieza", "ACTIVO")
+                db.empleadoDao().insertarTodos(listOf(
+                    Empleado(1, "EMP-1234", "Juan Carlos Pérez", "Operario de Envasado", null, true),
+                    Empleado(2, "EMP-5678", "María Elena López", "Operaria de Etiquetado", null, true),
+                    Empleado(3, "EMP-9012", "Carlos Alberto García", "Operario de Empaque", null, true),
+                    Empleado(4, "EMP-3456", "Ana Patricia Martínez", "Operaria de Control de Calidad", null, true),
+                    Empleado(5, "EMP-7890", "Roberto Hernández", "Operario de Limpieza", null, true)
                 ))
             }
         }
@@ -148,6 +148,26 @@ class RegistroOperariosViewModel(application: Application) : AndroidViewModel(ap
     // ── Buscar empleado por ID (para el diálogo) ──────────────────────────
     suspend fun buscarEmpleado(empleadoId: Int): Empleado? =
         db.empleadoDao().obtenerPorId(empleadoId)
+
+    // ── Cerrar Hoja ───────────────────────────────────────────────────────
+    fun cerrarHoja(hojaId: Int) {
+        _uiState.value = UiState.Loading
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            val hoja = db.hojaTiempoDao().obtenerPorId(hojaId)
+            if (hoja != null) {
+                db.hojaTiempoDao().actualizar(hoja.copy(estado = "FINALIZADA"))
+                
+                // Switch to main thread for navigation/success event
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                    _uiState.value = UiState.Success("cerrar_hoja_ok")
+                }
+            } else {
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                    _uiState.value = UiState.Error("Hoja de tiempo no encontrada")
+                }
+            }
+        }
+    }
 
     fun resetEstado() { _uiState.value = UiState.Idle }
 }
